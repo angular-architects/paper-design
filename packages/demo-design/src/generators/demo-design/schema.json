@@ -5,6 +5,6 @@
   "title": "",
   "type": "object",
   "properties": {
-   
+    "project": { "type": "string" }
   }
 }

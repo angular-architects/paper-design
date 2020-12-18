@@ -11,8 +11,8 @@ export default function (options: DemoDesignGeneratorSchema) {
     const projectRoot = config.projects[projectName].root;
     const styles = config.projects[projectName].architect.build.options.styles || [] as string[];
 
-    styles.unshift('node_modules/@angular-architects/demo-design/assets/scss/paper-dashboard.scss');
-    styles.unshift('node_modules/@angular-architects/demo-design/assets/css/bootstrap.css');
+    styles.unshift('node_modules/@angular-architects/paper-design/assets/scss/paper-dashboard.scss');
+    styles.unshift('node_modules/@angular-architects/paper-design/assets/css/bootstrap.css');
 
     host.overwrite('angular.json', JSON.stringify(config, null, '\t'));
 
@@ -29,8 +29,7 @@ export default function (options: DemoDesignGeneratorSchema) {
 
 }
 
-function deleteExistingFiles(host, projectRoot: any) {
-  host.delete(projectRoot + '/src/app/app.component.ts');
+function deleteExistingFiles(host: Tree, projectRoot: any) {
   host.delete(projectRoot + '/src/app/app.component.html');
   host.delete(projectRoot + '/src/app/app.module.ts');
 }
