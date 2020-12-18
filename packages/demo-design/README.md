@@ -1,7 +1,13 @@
-# demo-design
+# @angular-architects/paper-design
 
-This library was generated with [Nx](https://nx.dev).
+Adds Creative Tim's free Paper Design template, Bootstrap, and a basic Skeleton to your Angular application.
 
-## Running unit tests
+## Usage
 
-Run `nx test demo-design` to execute the unit tests via [Jest](https://jestjs.io).
+```
+ng add @angular-architects/paper-design
+```
+
+## Credits
+- [Bootstrap](https://getbootstrap.com/)
+- [Creative Tim](https://www.creative-tim.com/)
