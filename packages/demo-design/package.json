@@ -1,7 +1,7 @@
 {
-  "name": "@angular-architects/demo-design",
-  "version": "0.0.1",
+  "name": "@angular-architects/paper-design",
+  "version": "0.0.11",
   "main": "src/index.js",
-  "generators": "./generators.json",
-  "executors": "./executors.json"
+  "schematics": "./generators.json",
+  "private": false
 }

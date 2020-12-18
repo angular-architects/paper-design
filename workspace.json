@@ -37,6 +37,16 @@
             "assets": [
               "packages/demo-design/*.md",
               {
+                "input": "./packages/demo-design/assets",
+                "glob": "**",
+                "output": "assets"
+              },  
+              {
+                "input": "./packages/demo-design/src/generators/demo-design/files",
+                "glob": "**",
+                "output": "src/generators/demo-design/files"
+              },                           
+              {
                 "input": "./packages/demo-design/src",
                 "glob": "**/*.!(ts)",
                 "output": "./src"

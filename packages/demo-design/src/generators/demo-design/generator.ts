@@ -1,73 +1,48 @@
-import {
-  addProjectConfiguration,
-  formatFiles,
-  generateFiles,
-  getWorkspaceLayout,
-  names,
-  offsetFromRoot,
-  Tree,
-} from '@nrwl/devkit';
-import * as path from 'path';
 import { DemoDesignGeneratorSchema } from './schema';
+import { Tree, apply, url, template, move, mergeWith, branchAndMerge } from '@angular-devkit/schematics';
 
-interface NormalizedSchema extends DemoDesignGeneratorSchema {
-  projectName: string;
-  projectRoot: string;
-  projectDirectory: string;
-  parsedTags: string[];
+export default function (options: DemoDesignGeneratorSchema) {
+  
+  return function (host: Tree) {
+
+    const config = JSON.parse(host.read('angular.json').toString('utf8'));
+    const projectName = options.project || config.defaultProject;
+   
+    const projectRoot = config.projects[projectName].root;
+    const styles = config.projects[projectName].architect.build.options.styles || [] as string[];
+
+    styles.unshift('node_modules/@angular-architects/demo-design/assets/scss/paper-dashboard.scss');
+    styles.unshift('node_modules/@angular-architects/demo-design/assets/css/bootstrap.css');
+
+    host.overwrite('angular.json', JSON.stringify(config, null, '\t'));
+
+    const templateSource = apply(url('./files'), [
+      template({}),
+      move(projectRoot || '')
+    ]);
+
+    deleteExistingFiles(host, projectRoot);
+    updateIndexHtml(projectRoot, host);
+
+    return branchAndMerge(mergeWith(templateSource));
+  }
+
 }
 
-function normalizeOptions(
-  host: Tree,
-  options: DemoDesignGeneratorSchema
-): NormalizedSchema {
-  const name = names(options.name).fileName;
-  const projectDirectory = options.directory
-    ? `${names(options.directory).fileName}/${name}`
-    : name;
-  const projectName = projectDirectory.replace(new RegExp('/', 'g'), '-');
-  const projectRoot = `${getWorkspaceLayout(host).libsDir}/${projectDirectory}`;
-  const parsedTags = options.tags
-    ? options.tags.split(',').map((s) => s.trim())
-    : [];
-
-  return {
-    ...options,
-    projectName,
-    projectRoot,
-    projectDirectory,
-    parsedTags,
-  };
+function deleteExistingFiles(host, projectRoot: any) {
+  host.delete(projectRoot + '/src/app/app.component.ts');
+  host.delete(projectRoot + '/src/app/app.component.html');
+  host.delete(projectRoot + '/src/app/app.module.ts');
 }
 
-function addFiles(host: Tree, options: NormalizedSchema) {
-  const templateOptions = {
-    ...options,
-    ...names(options.name),
-    offsetFromRoot: offsetFromRoot(options.projectRoot),
-    template: '',
-  };
-  generateFiles(
-    host,
-    path.join(__dirname, 'files'),
-    options.projectRoot,
-    templateOptions
-  );
+function updateIndexHtml(projectRoot: any, host) {
+  const indexHtmlPath = projectRoot + '/src/index.html';
+  const indexHtml = host.read(indexHtmlPath).toString('utf8');
+  const updatedIndexHtml = indexHtml.replace('</head>', `
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="preload" as="style" onload="this.rel='stylesheet'">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+</head>
+`);
+  host.overwrite(indexHtmlPath, updatedIndexHtml);
 }
 
-export default async function (host: Tree, options: DemoDesignGeneratorSchema) {
-  const normalizedOptions = normalizeOptions(host, options);
-  addProjectConfiguration(host, normalizedOptions.projectName, {
-    root: normalizedOptions.projectRoot,
-    projectType: 'library',
-    sourceRoot: `${normalizedOptions.projectRoot}/src`,
-    targets: {
-      build: {
-        executor: '@angular-architects/demo-design:build',
-      },
-    },
-    tags: normalizedOptions.parsedTags,
-  });
-  addFiles(host, normalizedOptions);
-  await formatFiles(host);
-}
