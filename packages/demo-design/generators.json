@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "name": "demo-design",
+  "version": "0.0.1",
+  "generators": {
+    "demo-design": {
+      "factory": "./src/generators/demo-design/generator",
+      "schema": "./src/generators/demo-design/schema.json",
+      "description": "demo-design generator"
+    }
+  }
+}

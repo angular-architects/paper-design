@@ -1,0 +1,79 @@
+{
+  "version": 2,
+  "projects": {
+    "demo-design": {
+      "root": "packages/demo-design",
+      "sourceRoot": "packages/demo-design/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/demo-design/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/packages/demo-design"
+          ],
+          "options": {
+            "jestConfig": "packages/demo-design/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/packages/demo-design",
+            "tsConfig": "packages/demo-design/tsconfig.lib.json",
+            "packageJson": "packages/demo-design/package.json",
+            "main": "packages/demo-design/src/index.ts",
+            "assets": [
+              "packages/demo-design/*.md",
+              {
+                "input": "./packages/demo-design/src",
+                "glob": "**/*.!(ts)",
+                "output": "./src"
+              },
+              {
+                "input": "./packages/demo-design",
+                "glob": "generators.json",
+                "output": "."
+              },
+              {
+                "input": "./packages/demo-design",
+                "glob": "executors.json",
+                "output": "."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "demo-design-e2e": {
+      "projectType": "application",
+      "root": "e2e\\demo-design-e2e",
+      "sourceRoot": "e2e\\demo-design-e2e/src",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/nx-plugin:e2e",
+          "options": {
+            "target": "demo-design:build",
+            "npmPackageName": "@angular-architects/demo-design",
+            "pluginOutputPath": "dist/packages/demo-design",
+            "jestConfig": "e2e/demo-design-e2e/jest.config.js"
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/workspace"
+  }
+}
