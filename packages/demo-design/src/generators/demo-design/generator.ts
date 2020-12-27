@@ -16,12 +16,15 @@ export default function (options: DemoDesignGeneratorSchema) {
 
     host.overwrite('angular.json', JSON.stringify(config, null, '\t'));
 
+    const styleFormat = 
+      host.exists('/src/app/app.component.css') ? 'css' : 'scss'; 
+
     const templateSource = apply(url('./files'), [
-      template({}),
+      template({styleFormat}),
       move(projectRoot || '')
     ]);
 
-    deleteExistingFiles(host, projectRoot);
+    moveExistingFiles(host, projectRoot);
     updateIndexHtml(projectRoot, host);
 
     return branchAndMerge(mergeWith(templateSource));
@@ -29,9 +32,19 @@ export default function (options: DemoDesignGeneratorSchema) {
 
 }
 
-function deleteExistingFiles(host: Tree, projectRoot: any) {
-  host.delete(projectRoot + '/src/app/app.component.html');
-  host.delete(projectRoot + '/src/app/app.module.ts');
+function moveExistingFiles(host: Tree, projectRoot: any) {
+  host.rename(
+    projectRoot + '/src/app/app.component.ts',
+    projectRoot + '/src/app/bak/app.component.ts.bak'
+  );
+  host.rename(
+    projectRoot + '/src/app/app.component.html',
+    projectRoot + '/src/app/bak/app.component.html.bak'
+  );
+  host.rename(
+    projectRoot + '/src/app/app.module.ts',
+    projectRoot + '/src/app/bak/app.module.ts.bak'
+  );
 }
 
 function updateIndexHtml(projectRoot: any, host) {
