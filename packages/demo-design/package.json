@@ -1,6 +1,6 @@
 {
   "name": "@angular-architects/paper-design",
-  "version": "0.0.20",
+  "version": "1.0.00",
   "main": "src/index.js",
   "schematics": "./generators.json",
   "private": false
