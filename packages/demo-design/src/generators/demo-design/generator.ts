@@ -6,7 +6,7 @@ export default function (options: DemoDesignGeneratorSchema) {
   return function (host: Tree) {
 
     const config = JSON.parse(host.read('angular.json').toString('utf8'));
-    const projectName = options.project || config.defaultProject;
+    const projectName = options.project || config.defaultProject || Object.keys(config.projects)[0];
    
     const projectRoot = config.projects[projectName].root;
     const styles = config.projects[projectName].architect.build.options.styles || [] as string[];
