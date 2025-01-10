@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { Component } from '@angular/core';
 
 @Component({
+    standalone: true,
     selector: 'app-navbar-cmp',
     templateUrl: 'navbar.component.html'
 })
