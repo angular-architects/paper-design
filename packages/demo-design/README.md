@@ -1,6 +1,9 @@
-# @angular-architects/paper-design
+# @angular-architects/paper-design 2.0
 
-Adds Creative Tim's free Paper Design template, Bootstrap, and a basic Skeleton to your Angular application.
+To make version 2.0 more lightweight, the dependecy to bootstrap was removed. It is tested with Angular 19+.
+
+**Please note:** Compared to former versions, the styles are a bit different.
+
 
 ## Usage
 
